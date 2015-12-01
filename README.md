@@ -38,9 +38,10 @@ När känslig data inte krypteras/hashas på ett korrekt sätt så är följdern
 Ett exempel är att inloggningsuppgifter kan användas till att logga in på andra hemsidor och tjänster där användaren har samma användarnamn och lösenord. Väldigt känsliga bilder skulle kunna användas för utpressning av attackeraren. Kreditkortsuppgifter och personnummer skulle kunna användas för e-handel.[36]
 
 #### Identifierad ohashad känslig data i applikationen
-I det här fallet är det extra illa eftersom lösenordet sparas i klartext och inte "hashas" till ett värde som inte går att gissa sig till av en attackerare. Hashning innebär att lösenordet översätts till ett större antal till synes slumpmässiga tecken som INTE går att översätta tillbaka till ursprungslösenordet. Ifall användaren nu får tag i inloggningsuppgifterna så kan han direkt börja använda dessa till att logga in på andra hemsidor/e-tjänster. Men ifall lösenordet hade varit hashat (men en säker metod) så hade attackeraren inte haft någon större nytta av dessa uppgifter.[]
+I det här fallet är det extra illa eftersom lösenordet sparas i klartext och inte "hashas" till ett värde som inte går att gissa sig till av en attackerare. Hashning innebär att lösenordet översätts till ett större antal till synes slumpmässiga tecken som INTE går att översätta tillbaka till ursprungslösenordet. Ifall attackeraren nu får tag i inloggningsuppgifterna så kan han direkt börja använda dessa till att logga in på andra hemsidor/e-tjänster. Men ifall lösenordet hade varit hashat (med en säker metod) så hade attackeraren haft betydligt mindre nytta av dessa uppgifter.[]
 
 #### Hur problemet kan åtgärdas
+Ett tips är att använda sig av följande [bibliotek](https://nodejs.org/api/crypto.html) för att kryptera lösenord. Viktigt att tänka på vid hashning är att använda sig av olika 32 eller 64 bitars "salt" för varje användares lösenord. Detta "salt" värde kan sparas i ett separat fält intill databaslösenordet.  [91]
 
 ### Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
 
@@ -94,6 +95,9 @@ Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktion
 ## Tips
 
 ## Referenser
+
+[91] The Open Web Application Security Project, "Password Storage Cheat Sheet", OWASP, November 2015, [Online]  Tillgänglig: 
+https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet [Hämtad: 12 november, 2015].
 
 [73] The Open Web Application Security Project, "XSS (Cross Site Scripting) Prevention Cheat Sheet", OWASP, Septempber 2015, [Online]  Tillgänglig: 
 https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet [Hämtad: 12 november, 2015].
