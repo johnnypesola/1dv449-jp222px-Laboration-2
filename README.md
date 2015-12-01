@@ -64,20 +64,15 @@ Det enklaste sättet att skydda sig är att filtrera det postade innehållet och
 ### Problem 5: Säkerhetskontroll för funktioner saknas
 
 #### Vad problemet innebär
-
+Attackerare som känner till eller som kan gissa sig till adresser gömda adresser i systemet kan att utföra funktioner eller metoder som de inte ska ha rätt till egentligen. Detta är möjligt eftersom det inte finns några rättighetskontroller på funktionerna/metoderna.
 
 #### Eventuella följder
+Följderna är att objekt av olika slag kan skapas, ändras eller tas bort eller mer avancerade operationer kan utföras i applikationen som attackeraren inte ska ha rätt till. Exempelvis skulle användare skulle kunnas tas bort, eller i den här applikationens fall: att meddelanden kan tas bort bara genom att känna till adressen och de rätta post-parametrarna.
 
 #### Identifierade problem i applikationen
-
-Går att posta nya meddelanden utan att vara inloggad: Nej
-Går att ta bort meddelanden utan att vara inloggad: Ja
-
-Det går att se alla meddelanden fast man inte är inloggad.
-
-Det finns en sårbarhet där det går att ta bort meddelanden utan att vara inloggad som administratör.   
-Exempel: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
-
+I applikationen går att att gå in på index-sidan direkt utan att behöva logga in. Detta genom att helt enkelt ange adressen i webbläsarens adressfält. Antagligen ska detta endast vara möjligt för de inloggade användarna.   
+   
+Ett annat betydligt större problem är det går att ta bort meddelanden utan någon som helst inloggning, bara genom att känna till adressen och parametrarna. Exempelvis: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet med id-nummret 3 bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
 
 #### Hur problemet kan åtgärdas
 
