@@ -57,7 +57,7 @@ Eftersom attackeraren han kontroll över allt som visas på den kapade hemsidan 
 Applikationen bearbetar/filtrerar inte bort javascript eller andra känsliga html taggar ifrån meddelandetexten som postas in. 
 
 #### Hur problemet kan åtgärdas
-Det enklaste sättet att skydda sig är att filtrera det postade innehållet och tillämpa whitelists för tillåtna tecken. Annars rekommenderas ett bibliotek för att tillämpa detta då det kan vara svårt att missa alla källor där detta kan uppstå. Organisationen OWASP har en bra källa med regler att tänka på om man väljer att göra detta själv [73]. Sammanfattningsvis är regeln att inte placera opålitlig data inom någon html-tags taggar (<div  d.v.s. här >), och att alltid filtrera datat som finns emellan start- och sluttaggen (<div> d.v.s här </div>). 
+Det enklaste sättet att skydda sig är att filtrera det postade innehållet och tillämpa whitelists för tillåtna tecken. Annars rekommenderas ett bibliotek för att tillämpa detta då det kan vara svårt att missa alla källor där detta kan uppstå. Organisationen OWASP har en bra källa med regler att tänka på om man väljer att göra detta själv [73]. Sammanfattningsvis är regeln att inte placera opålitlig data inom någon html-tags taggar <div  d.v.s. här >, och att alltid filtrera datat som finns emellan start- och sluttaggen <div> d.v.s här </div>. 
    
 [Här](https://github.com/chriso/validator.js) är ett förslag på ett bibliotek som skulle vara ett alternativ för projektet
 
