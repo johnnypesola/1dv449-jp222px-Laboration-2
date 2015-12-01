@@ -72,7 +72,7 @@ Följderna är att objekt av olika slag kan skapas, ändras eller tas bort eller
 #### Identifierade problem i applikationen
 I applikationen går att att gå in på index-sidan direkt utan att behöva logga in. Detta genom att helt enkelt ange adressen i webbläsarens adressfält. Antagligen ska detta endast vara möjligt för de inloggade användarna.   
    
-Ett annat betydligt större problem är det går att ta bort meddelanden utan någon som helst inloggning, bara genom att känna till adressen och parametrarna. Exempelvis: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet med id-nummret 3 bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
+Ett annat betydligt större problem är det går att ta bort meddelanden utan någon som helst inloggning, bara genom att känna till adressen och parametrarna. Exempelvis: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet med id-numret 3 bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
 
 #### Hur problemet kan åtgärdas
 
