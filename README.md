@@ -4,17 +4,20 @@
 
 Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisationen OWASP:s top 10 lista över säkerhetshål. Denna lista kan hittas [här](http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf)
 
-### Problem 1: SQL injections
+### Problem 1 (A1): SQL injections
 
 
 
-### Problem 2: Autentisering och sessions säkerhet (Lagring av känsligt data)
+### Problem 2 (A): Autentisering och sessions säkerhet (Lagring av känsligt data)
 
 ### Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
 
 ### Problem 4: Osäkra objektreferenser
 
+### Problem 5 (A7): Säkerhetskontroll för funktioner saknas
+
 Går att ta bort object, meddelanden i det här fallet utan att vara inloggad som administratör.
+
 
 ## Prestandaproblem (Front end)
 
