@@ -80,17 +80,19 @@ En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. O
 
 #### Vad problemet innebär
 
-
-
+Det är möjligt för andra hemsidor, webb-applikationer och andra illasinnade källor att anropa funktionalitet i systemet om en användare är inloggad i messy-labbage applikationen. 
 
 #### Eventuella följder
 
+Användare kan, utan att de är medvetna om det och utan medgivande manipulera messy-labbage applikationen innehåll genom att surfa in på andra hemsidor. De illasinnade applikationerna anropar helt enkelt exempelvis http://localhost:3000/message med en POST med ett nytt meddelande genom javascript i användarens webbläsare i samband med att användaren besöker den illasinnade webbplatsen. I och med att användaren fortfarande är inloggad i systemet så går detta utan problem.
+
 #### Identifierade problem i applikationen
+
+I applikationen finns det inget skydd mot CSRF alls på någon sida.
 
 #### Hur problemet kan åtgärdas
 
-
-
+Genom att generera en slumpmässig sträng (token) och placera den i ett gömt formulärfält för varje POST request, som servern sedan validerar kan detta problem lösas. De illasinnade hemsidorna/källorna kan omöjligt gissa sig till det slumpmässiga strängarna förutsatt att de är korrekt implementerade.[]
 
 ## Prestandaproblem (Front end)
 
