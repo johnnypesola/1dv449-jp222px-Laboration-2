@@ -16,7 +16,9 @@ Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisa
 
 ### Problem 5 (A7): Säkerhetskontroll för funktioner saknas
 
-Det finns en sårbarhet där det går att ta bort meddelanden utan att vara inloggad som administratör.   
+Det går att se alla meddelanden fast man inte är inloggad.
+
+(Osäkert) Det finns en sårbarhet där det går att ta bort meddelanden utan att vara inloggad som administratör.   
 Exempel: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
 
 En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [57].
