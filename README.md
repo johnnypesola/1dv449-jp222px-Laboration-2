@@ -59,9 +59,7 @@ Det enklaste sättet att skydda sig är att filtrera det postade innehållet och
    
 [Här](https://github.com/chriso/validator.js) är ett förslag på ett bibliotek som skulle vara ett alternativ för projektet
 
-### Problem 4: Osäkra objektreferenser
-
-### Problem 5: Säkerhetskontroll för funktioner saknas
+### Problem 4: Säkerhetskontroll för funktioner saknas
 
 #### Vad problemet innebär
 Attackerare som känner till eller som kan gissa sig till adresser gömda adresser i systemet kan att utföra funktioner eller metoder som de inte ska ha rätt till egentligen. Detta är möjligt eftersom det inte finns några rättighetskontroller på funktionerna/metoderna.
@@ -77,6 +75,22 @@ Ett annat betydligt större problem är det går att ta bort meddelanden utan n�
 #### Hur problemet kan åtgärdas
 
 En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [57].
+
+### Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)
+
+#### Vad problemet innebär
+
+
+
+
+#### Eventuella följder
+
+#### Identifierade problem i applikationen
+
+#### Hur problemet kan åtgärdas
+
+
+
 
 ## Prestandaproblem (Front end)
 
