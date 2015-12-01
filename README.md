@@ -4,9 +4,6 @@
 
 ## Okatogoriserat
 
-Går att posta nya meddelanden utan att vara inloggad: Nej
-Går att ta bort meddelanden utan att vara inloggad: Ja
-
 
 Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisationen OWASP:s top 10 lista över säkerhetshål. Denna lista kan hittas [här](http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf)
 
@@ -51,7 +48,7 @@ I det här fallet är det extra illa eftersom lösenordet sparas i klartext och 
 Om data inte valideras korrekt, mer specifikt att javascript, iframe-taggar, html-element med src attribut (andra kodspråk och taggar kan förekomma) inte filtreras/bearbetas i innehållet som postas från klient till server uppstår denna säkerhetsrisk. När innehåller sedan visas i klienters webbläsare så körs den tidigare postade javascript-koden hos klienten och kan då exempelvis stjäla klientens sessionskaka och vidarebefordra denna till attackeraren. I stora drag har attackeraren kontroll över det mesta som presenteras för och som finns lagrat hos klienten gällande den aktuella webbsidan. [81]
 
 #### Eventuella följder
-Eftersom attackeraren han kontroll över allt som visas på den kapade hemsidan hos klientens webbläsare så kan användaren enkelt luras till att exempelvis att ange känsliga uppgifter (kreditkort, personnummer, mm). Men det allvarligaste är nog att sessionen enkelt kan stjälas av attackeraren och detta innebär att attackeraren blir "inloggad" på hemsidan/applikationen som användaren utan att kunna användarens uppgifter.[]
+Eftersom attackeraren har kontroll över allt som visas på den kapade hemsidan hos klientens webbläsare så kan användaren enkelt luras till att exempelvis att ange känsliga uppgifter (kreditkort, personnummer, mm). Men det allvarligaste är nog att sessionen enkelt kan stjälas av attackeraren och detta innebär att attackeraren blir "inloggad" på hemsidan/applikationen som användaren utan att kunna användarens uppgifter.[]
 
 #### Identifierade problem i applikationen
 Applikationen bearbetar/filtrerar inte bort javascript eller andra känsliga html taggar ifrån meddelandetexten som postas in. 
@@ -63,15 +60,27 @@ Det enklaste sättet att skydda sig är att filtrera det postade innehållet och
 
 ### Problem 4: Osäkra objektreferenser
 
-### Problem 5 (A7): Säkerhetskontroll för funktioner saknas
+### Problem 5: Säkerhetskontroll för funktioner saknas
+
+#### Vad problemet innebär
+
+
+#### Eventuella följder
+
+#### Identifierade problem i applikationen
+
+Går att posta nya meddelanden utan att vara inloggad: Nej
+Går att ta bort meddelanden utan att vara inloggad: Ja
 
 Det går att se alla meddelanden fast man inte är inloggad.
-   
-(Osäkert) Det finns en sårbarhet där det går att ta bort meddelanden utan att vara inloggad som administratör.   
-Exempel: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
-   
-En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [57].
 
+Det finns en sårbarhet där det går att ta bort meddelanden utan att vara inloggad som administratör.   
+Exempel: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
+
+
+#### Hur problemet kan åtgärdas
+
+En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [57].
 
 ## Prestandaproblem (Front end)
 
