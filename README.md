@@ -16,7 +16,10 @@ Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisa
 
 ### Problem 5 (A7): Säkerhetskontroll för funktioner saknas
 
-Går att ta bort object, meddelanden i det här fallet utan att vara inloggad som administratör.
+Går att ta bort object, meddelanden i det här fallet utan att vara inloggad som administratör.   
+Exempel: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet bort oberoende om man är inloggad eller inte.
+
+En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [57].
 
 
 ## Prestandaproblem (Front end)
@@ -29,5 +32,9 @@ Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktion
 
 
 ## Tips
+
+## Referenser
+
+[57] The Open Web Application Security Project, "Guide to Authorization," OWASP, Maj 2009 [Online] Tillgänglig: https://www.owasp.org/index.php/Guide_to_Authorization. [Hämtad: 12 november, 2015].
 
 / Johnny Pesola
