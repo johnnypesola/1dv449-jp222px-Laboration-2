@@ -43,8 +43,23 @@ Ett exempel är att inloggningsuppgifter kan användas till att logga in på and
 #### Identifierad ohashad känslig data i applikationen
 I det här fallet är det extra illa eftersom lösenordet sparas i klartext och inte "hashas" till ett värde som inte går att gissa sig till av en attackerare. Hashning innebär att lösenordet översätts till ett större antal till synes slumpmässiga tecken som INTE går att översätta tillbaka till ursprungslösenordet. Ifall användaren nu får tag i inloggningsuppgifterna så kan han direkt börja använda dessa till att logga in på andra hemsidor/e-tjänster. Men ifall lösenordet hade varit hashat (men en säker metod) så hade attackeraren inte haft någon större nytta av dessa uppgifter.[]
 
+#### Hur problemet kan åtgärdas
+
 ### Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
 
+#### Vad problemet innebär
+Om data inte valideras korrekt, mer specifikt att javascript, iframe-taggar, html-element med src attribut (andra kodspråk och taggar kan förekomma) inte filtreras/bearbetas i innehållet som postas från klient till server uppstår denna säkerhetsrisk. När innehåller sedan visas i klienters webbläsare så körs den tidigare postade javascript-koden hos klienten och kan då exempelvis stjäla klientens sessionskaka och vidarebefordra denna till attackeraren. I stora drag har attackeraren kontroll över det mesta som presenteras för och som finns lagrat hos klienten gällande den aktuella webbsidan. [81]
+
+#### Eventuella följder
+Eftersom attackeraren han kontroll över allt som visas på den kapade hemsidan hos klientens webbläsare så kan användaren enkelt luras till att exempelvis att ange känsliga uppgifter (kreditkort, personnummer, mm). Men det allvarligaste är nog att sessionen enkelt kan stjälas av attackeraren och detta innebär att attackeraren blir "inloggad" på hemsidan/applikationen som användaren utan att kunna användarens uppgifter.[]
+
+#### Identifierade problem i applikationen
+Applikationen bearbetar/filtrerar inte bort javascript eller andra känsliga html taggar ifrån meddelandetexten som postas in. 
+
+#### Hur problemet kan åtgärdas
+Det enklaste sättet att skydda sig är att filtrera det postade innehållet och tillämpa whitelists för tillåtna tecken. Annars rekommenderas ett bibliotek för att tillämpa detta då det kan vara svårt att missa alla källor där detta kan uppstå. Organisationen OWASP har en bra källa med regler att tänka på om man väljer att göra detta själv [73]. Sammanfattningsvis är regeln att inte placera opålitlig data inom någon html-tags taggar (<div  d.v.s. här >), och att alltid filtrera datat som finns emellan start- och sluttaggen (<div> d.v.s här </div>). 
+   
+(Här)[https://github.com/chriso/validator.js] är ett förslag på ett bibliotek som skulle vara ett alternativ för projektet
 
 ### Problem 4: Osäkra objektreferenser
 
@@ -70,6 +85,12 @@ Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktion
 ## Tips
 
 ## Referenser
+
+[73] The Open Web Application Security Project, "XSS (Cross Site Scripting) Prevention Cheat Sheet", OWASP, Septempber 2015, [Online]  Tillgänglig: 
+https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet [Hämtad: 12 november, 2015].
+
+[81] The Open Web Application Security Project, "Top 10 2013-A3-Cross-Site Scripting (XSS)", OWASP, Februari 2014, [Online]  Tillgänglig: 
+https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_(XSS) [Hämtad: 12 november, 2015].
 
 [36] The Open Web Application Security Project, "Top 10 2013-A6-Sensitive Data Exposure", OWASP, Juni 2013, [Online]  Tillgänglig: 
 https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure [Hämtad: 12 november, 2015].
