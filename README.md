@@ -92,7 +92,7 @@ I applikationen finns det inget skydd mot CSRF alls på någon sida.
 
 #### Hur problemet kan åtgärdas
 
-Genom att generera en slumpmässig sträng (token) och placera den i ett gömt formulärfält för varje POST request, som servern sedan validerar kan detta problem lösas. De illasinnade hemsidorna/källorna kan omöjligt gissa sig till det slumpmässiga strängarna förutsatt att de är korrekt implementerade.[]
+Genom att tillämpa Synchronizer Token Pattern och generera en slumpmässig sträng (token), placera den i ett gömt formulärfält för varje POST request, som servern sedan validerar kan detta problem lösas. De illasinnade hemsidorna/källorna kan omöjligt gissa sig till det slumpmässiga strängarna förutsatt att detta är korrekt implementerat. [22]
 
 ## Prestandaproblem (Front end)
 
@@ -106,6 +106,8 @@ Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktion
 ## Tips
 
 ## Referenser
+[22] The Open Web Application Security Project, "Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet", OWASP, November 2015, [Online]  Tillgänglig: 
+https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet
 
 [91] The Open Web Application Security Project, "Password Storage Cheat Sheet", OWASP, November 2015, [Online]  Tillgänglig: 
 https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet [Hämtad: 12 november, 2015].
