@@ -2,9 +2,6 @@
 
 ## Säkerhetsproblem
 
-## Okatogoriserat
-
-
 Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisationen OWASP:s top 10 lista över säkerhetshål. Denna lista kan hittas [här](http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf)
 
 ### Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
@@ -72,6 +69,8 @@ I applikationen går att att gå in på index-sidan direkt utan att behöva logg
    
 Ett annat betydligt större problem är det går att ta bort meddelanden utan någon som helst inloggning, bara genom att känna till adressen och parametrarna. Exempelvis: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet med id-numret 3 bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
 
+Säkerhetskontroll saknas även (check om användaren är inloggad) för att hämta meddelanden. Eftersom det i template filen default.html körs javascript som anropar metoden MessageBoard.getMessages så hämtas meddelanderna till klientens webbläsare när denne anländer till startsidan, utan att ens ha loggat in.
+
 #### Hur problemet kan åtgärdas
 
 En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [57].
@@ -112,27 +111,52 @@ För hemsidebesökare är sidan helvit utan innehåll tills scripten har hämtat
 
 Genom att placera scriptreferenserna i html dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[49]
 
-### Problem 7: Onödiga referenser till filer som saknas.
+### Problem 7: Onödiga referenser till filer som saknas eller inte används.
 
 #### Vad problemet innebär
 
-I filen appModules/siteViews/layouts/partials/head.html finns referenser till filer som inte existerar. Detta resulterar i onödiga HTTP anrop till servern som belastar både servern och klienter. [50]
+I filerna appModules/siteViews/layouts/partials/head.html och appModules/login/views/index.html finns referenser till filer som inte existerar. Detta resulterar i onödiga HTTP anrop till servern som belastar både servern och klienter. [50]
+
+Det finns även filer som laddas in o inödan: Stylesheet referensen till "//fonts.googleapis.com/icon?family=Material+Icons" verkar heller inte användas någonstans i dokumentet, vilket gör hämtning av denna fil helt onödig.
+   
+På start/login-sidan så laddas dessa två javascript in i onödan eftersom de inte används där: "/static/javascript/Message.js", "/static/javascript/MessageBoard.js".
+   
+Bakgrundsbilden "/static/images/b.jpg" används inte visuellt på sidan och laddas in i onödan.
+   
+När man är inloggad laddas filen "/static/css/signin.css" i onödan eftesom den bara används på startsidan.
+   
+CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitioner som inte används.
+
+
 
 #### Eventuella följder
 
-När klienters webbläsare försöker ladda ner dessa icke existerande filer så förhindras övriga resurser att laddas ner. Detta gör att sidan renderas onödigt sakta, speciellt då javascript referenserna finns i html-dokumentets sidhuvud.
+När klienters webbläsare försöker ladda ner dessa icke existerande samt onödiga filer så förhindras övriga resurser att laddas ner. Detta gör att sidan renderas onödigt sakta, speciellt då javascript referenserna finns i html-dokumentets sidhuvud.
 
 #### Hur problemet kan åtgärdas
 
-Ta bort referenserna till de icke existerande dokumenten.
+Ta bort referenserna till de icke existerande dokumenten och samt de som laddas in i onödan. Använd inte det gemensamma sidhuvudet i start/login-sidan. Ta bort onödiga stilar definierade i Bootstrap.css filen.
 
+### Problem 8: Förminska och minifiera jquery
 
+#### Vad problemet innebär
+
+I applikationen används en onödigt stor version av jquery som inte är minifierad. Denna version har en hel del kod för jquery moduler som inte används i applikationen. Den enda modulen som egentligen används är ajax-modulen.
+
+#### Eventuella följder
+
+Sidan renderas onödigt sakta för klienterna.
+
+#### Hur problemet kan åtgärdas
+
+Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
 
 ## Egna övergripande reflektioner
 
 Enda autentiseringschecken finns när man kommer till index. Annars så har vem som helst rätt att göra vad som helst i applikationen.
   
 Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktionaliteten finns där, och även frontend funktionalitet. Men det är inte synsligt i gränsnittet.
+
 
 
 ## Tips
