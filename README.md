@@ -96,6 +96,38 @@ Genom att tillämpa Synchronizer Token Pattern och generera en slumpmässig str�
 
 ## Prestandaproblem (Front end)
 
+HTTPD/2 
+
+### Problem 6: Referenser till externa script i sidhuvudet
+
+#### Vad problemet innebär
+
+I filen appModules/siteViews/layouts/partials/head.html så finns det script taggar som refererar till externa javascriptfiler. Detta är ett prestantaproblem då renderingen av sidan och hämtningen av andra resurser stannar tills webbläsaren har hämtat dessa javascriptfiler. Först när detta är färdigt hämtas resterande resurser och sidan renderas.[49]
+
+#### Eventuella följder
+
+För hemsidebesökare är sidan helvit utan innehåll tills scripten har hämtats och laddats av webbläsaren, först då får klienter en visuell bekräftelse på att sidan över huvud taget laddar. Klienter med dåliga uppkopplingar (mobiltelefoner) upplever detta värst.[]
+
+#### Hur problemet kan åtgärdas
+
+Genom att placera scriptreferenserna i html dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[49]
+
+### Problem 7: Onödiga referenser till filer som saknas.
+
+#### Vad problemet innebär
+
+I filen appModules/siteViews/layouts/partials/head.html finns referenser till filer som inte existerar. Detta resulterar i onödiga HTTP anrop till servern som belastar både servern och klienter. [50]
+
+#### Eventuella följder
+
+När klienters webbläsare försöker ladda ner dessa icke existerande filer så förhindras övriga resurser att laddas ner. Detta gör att sidan renderas onödigt sakta, speciellt då javascript referenserna finns i html-dokumentets sidhuvud.
+
+#### Hur problemet kan åtgärdas
+
+Ta bort referenserna till de icke existerande dokumenten.
+
+
+
 ## Egna övergripande reflektioner
 
 Enda autentiseringschecken finns när man kommer till index. Annars så har vem som helst rätt att göra vad som helst i applikationen.
@@ -106,6 +138,11 @@ Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktion
 ## Tips
 
 ## Referenser
+
+[50] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 10.
+
+[49] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 45.
+
 [22] The Open Web Application Security Project, "Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet", OWASP, November 2015, [Online]  Tillgänglig: 
 https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet
 
