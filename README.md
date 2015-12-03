@@ -95,63 +95,79 @@ Genom att tillämpa Synchronizer Token Pattern och generera en slumpmässig str�
 
 ## Prestandaproblem (Front end)
 
-HTTPD/2 
-
-### Problem 6: Referenser till externa script i sidhuvudet
+### Problem 6: Referenser till javascriptfiler script i sidhuvudet
 
 #### Vad problemet innebär
 
-I filen appModules/siteViews/layouts/partials/head.html så finns det script taggar som refererar till externa javascriptfiler. Detta är ett prestantaproblem då renderingen av sidan och hämtningen av andra resurser stannar tills webbläsaren har hämtat dessa javascriptfiler. Först när detta är färdigt hämtas resterande resurser och sidan renderas.[49]
+När det finns referenser till externa scriptfiler i sidhuvudet så är det ett prestantaproblem då renderingen av sidan och hämtningen av andra resurser stannar tills webbläsaren har hämtat dessa javascriptfiler. Först när detta är färdigt hämtas resterande resurser och sidan renderas.[49]
 
 #### Eventuella följder
 
 För hemsidebesökare är sidan helvit utan innehåll tills scripten har hämtats och laddats av webbläsaren, först då får klienter en visuell bekräftelse på att sidan över huvud taget laddar. Klienter med dåliga uppkopplingar (mobiltelefoner) upplever detta värst.[]
 
+#### Identifierade problem i applikationen
+
+I filen appModules/siteViews/layouts/partials/head.html så finns det script taggar som refererar till externa javascriptfiler
+
 #### Hur problemet kan åtgärdas
 
 Genom att placera scriptreferenserna i html dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[49]
+
+
 
 ### Problem 7: Onödiga referenser till filer som saknas eller inte används.
 
 #### Vad problemet innebär
 
-I filerna appModules/siteViews/layouts/partials/head.html och appModules/login/views/index.html finns referenser till filer som inte existerar. Detta resulterar i onödiga HTTP anrop till servern som belastar både servern och klienter. [50]
-
-Det finns även filer som laddas in o inödan: Stylesheet referensen till "//fonts.googleapis.com/icon?family=Material+Icons" verkar heller inte användas någonstans i dokumentet, vilket gör hämtning av denna fil helt onödig.
-   
-På start/login-sidan så laddas dessa två javascript in i onödan eftersom de inte används där: "/static/javascript/Message.js", "/static/javascript/MessageBoard.js".
-   
-Bakgrundsbilden "/static/images/b.jpg" används inte visuellt på sidan och laddas in i onödan.
-   
-När man är inloggad laddas filen "/static/css/signin.css" i onödan eftesom den bara används på startsidan.
-   
-CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitioner som inte används.
-
-
+När der finns referenser till filer som saknas eller inte används så resulterar det i onödiga HTTP anrop till servern som belastar både servern och klienter. [50]
 
 #### Eventuella följder
 
 När klienters webbläsare försöker ladda ner dessa icke existerande samt onödiga filer så förhindras övriga resurser att laddas ner. Detta gör att sidan renderas onödigt sakta, speciellt då javascript referenserna finns i html-dokumentets sidhuvud.
 
+#### Identifierade problem i applikationen
+
+I filerna appModules/siteViews/layouts/partials/head.html och appModules/login/views/index.html finns referenser till filer som inte existerar.
+    
+Det finns även filer som laddas in o inödan: Stylesheet referensen till "//fonts.googleapis.com/icon?family=Material+Icons" verkar heller inte användas någonstans i dokumentet, vilket gör hämtning av denna fil helt onödig.
+    
+På start/login-sidan så laddas dessa två javascript in i onödan eftersom de inte används där: "/static/javascript/Message.js", "/static/javascript/MessageBoard.js".
+    
+Bakgrundsbilden "/static/images/b.jpg" används inte visuellt på sidan och laddas in i onödan.
+    
+När man är inloggad laddas filen "/static/css/signin.css" i onödan eftesom den bara används på startsidan.
+    
+CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitioner som inte används.
+
 #### Hur problemet kan åtgärdas
 
 Ta bort referenserna till de icke existerande dokumenten och samt de som laddas in i onödan. Använd inte det gemensamma sidhuvudet i start/login-sidan. Ta bort onödiga stilar definierade i Bootstrap.css filen.
 
-### Problem 8: Förminska och minifiera jquery
+
+### Problem 8: Onödigt stora javascript-filer
 
 #### Vad problemet innebär
 
-I applikationen används en onödigt stor version av jquery som inte är minifierad. Denna version har en hel del kod för jquery moduler som inte används i applikationen. Den enda modulen som egentligen används är ajax-modulen.
+Det finns javascript-filer som är onödigt stora genom att de innehåller onödigt kod som inte används samt att de inte är minifierade.[]
 
 #### Eventuella följder
 
 Sidan renderas onödigt sakta för klienterna.
 
+#### Identifierade problem i applikationen
+
+I applikationen används en onödigt stor version av jquery som inte är minifierad. Denna version har en hel del kod för jquery moduler som inte används i applikationen. Den enda modulen som egentligen används är ajax-modulen.
+
 #### Hur problemet kan åtgärdas
+
+Förminska och minifiera javascript.
 
 Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
 
 ## Egna övergripande reflektioner
+
+HTTPD/2 knackar på dörren, minifiering onödig.
+
 
 Enda autentiseringschecken finns när man kommer till index. Annars så har vem som helst rätt att göra vad som helst i applikationen.
   
