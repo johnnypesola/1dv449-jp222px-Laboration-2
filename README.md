@@ -26,7 +26,7 @@ Tittar man i filen "appModules/message/messageModel.js" så ser man att SQL sats
     
 Genom att göra på detta sätt genomgående i hela applikationen så bör problemet åtgärdas.
 
-### Problem 2 (A): Lagring av känsligt data
+### Problem 2: Lagring av känsligt data
 
 #### Vad problemet innebär
 När känslig data inte krypteras/hashas på ett korrekt sätt så är följderna av detta är katastrofala ifall någon obehörig skulle få åtkomst till dessa till exempel genom en SQL-injection attack.
@@ -164,10 +164,29 @@ Förminska och minifiera javascript.
 
 Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
 
+### Problem 9: Felplacerad inline kod (javascript & css)
+
+#### Vad problemet innebär
+
+Inline- javascript och css går förvisso snabbare för webbläsaren att läsa in första gången som sidan laddas in, tappar samtidigt möjligheten att bli cache:at resterande gånger som sidan laddas in.
+
+#### Eventuella följder
+
+Inline-kod cachas inte och detta gör i längden att sidan tar längre tid att hämta för klienten. Det är generellt bättre att placera css- och javascript kod i externa filer, då chansen är större att sidan laddar snabbare med hjälp av att webbläsaren cachar dessa filer (förutsatt att webbservern stöjder detta). [51]
+
+#### Identifierade problem i applikationen
+
+Filen appModules/siteViews/layouts/default.html innehåller javascript-kod som bättre hör hemma i MessageBoard.js
+Filerna appModules/message/views/index.html och appModules/siteViews/layouts/default.html innehåller css kod som (för cachningens skull) kan ligga i en egen css fil.
+
+#### Hur problemet kan åtgärdas
+
+Flytta inline javascriptkoden ifrån default.html till MessageBoard.js istället.
+Flytta inline csskoden ifrån index.html till en egen css fil och länka denna i sidhuvudet (head.html).
+
 ## Egna övergripande reflektioner
 
 HTTPD/2 knackar på dörren, minifiering onödig.
-
 
 Enda autentiseringschecken finns när man kommer till index. Annars så har vem som helst rätt att göra vad som helst i applikationen.
   
@@ -178,6 +197,8 @@ Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktion
 ## Tips
 
 ## Referenser
+
+[51] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 55.
 
 [50] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 10.
 
