@@ -1,12 +1,20 @@
 # Problem - Messy Labbage (Johnny Pesola / jp222px)
 
-[Problem 9](#p9)
+[Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.](#p1)
+[Problem 2: Lagring av känsligt data](#p2)
+[Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker](#p3)
+[Problem 4: Säkerhetskontroll för funktioner saknas](#p4)
+[Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)](#p5)
+[Problem 6: Referenser till javascriptfiler script i sidhuvudet](#p6)
+[Problem 7: Onödiga referenser till filer som saknas eller inte används](#p7)
+[Problem 8: Onödigt stora javascriptfiler](#p8)
+[Problem 9: Inline kod (javascript och css)](#p9)
 
 ## Säkerhetsproblem (Backend)
 
 Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisationen OWASP:s top 10 lista över säkerhetshål. Denna lista kan hittas [här](http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf)
 
-### Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
+### <a name="p1"></a>Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
 
 #### Vad problemet innebär
 Säkerhetshålet innebär kort och gott att attackeraren skriver sitt postdata på ett sådant sätt så att ej önskvärd databasåtkomst och manipulering av datat i databasen blir möjlig.
@@ -28,7 +36,7 @@ Tittar man i filen "appModules/message/messageModel.js" så ser man att SQL sats
     
 Genom att göra på detta sätt genomgående i hela applikationen så bör problemet åtgärdas.
 
-### Problem 2: Lagring av känsligt data
+### <a name="p2"></a>Problem 2: Lagring av känsligt data
 
 #### Vad problemet innebär
 När känslig data inte krypteras/hashas på ett korrekt sätt så är följderna av detta är katastrofala ifall någon obehörig skulle få åtkomst till dessa till exempel genom en SQL-injection attack.
@@ -42,7 +50,7 @@ I det här fallet är det extra illa eftersom lösenordet sparas i klartext och 
 #### Hur problemet kan åtgärdas
 Ett tips är att använda sig av följande [bibliotek](https://nodejs.org/api/crypto.html) för att kryptera lösenord. Viktigt att tänka på vid hashning är att använda sig av olika 32 eller 64 bitars "salt" för varje användares lösenord. Detta "salt" värde kan sparas i ett separat fält intill databaslösenordet.  [5]
 
-### Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
+### <a name="p3"></a>Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
 
 #### Vad problemet innebär
 Om data inte valideras korrekt, mer specifikt att javascript, iframe-taggar, html-element med src attribut (andra kodspråk och taggar kan förekomma) inte filtreras/bearbetas i innehållet som postas från klient till server uppstår denna säkerhetsrisk. När innehåller sedan visas i klienters webbläsare så körs den tidigare postade javascript-koden hos klienten och kan då exempelvis stjäla klientens sessionskaka och vidarebefordra denna till attackeraren. I stora drag har attackeraren kontroll över det mesta som presenteras för och som finns lagrat hos klienten gällande den aktuella webbsidan. [6]
@@ -58,7 +66,7 @@ Det enklaste sättet att skydda sig är att filtrera det postade innehållet och
    
 [Här](https://github.com/chriso/validator.js) är ett förslag på ett bibliotek som skulle vara ett alternativ för projektet
 
-### Problem 4: Säkerhetskontroll för funktioner saknas
+### <a name="p4"></a>Problem 4: Säkerhetskontroll för funktioner saknas
 
 #### Vad problemet innebär
 Attackerare som känner till eller som kan gissa sig till adresser gömda adresser i systemet kan att utföra funktioner eller metoder som de inte ska ha rätt till egentligen. Detta är möjligt eftersom det inte finns några rättighetskontroller på funktionerna/metoderna.
@@ -77,7 +85,7 @@ Säkerhetskontroll saknas även (check om användaren är inloggad) för att hä
 
 En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [10].
 
-### Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)
+### <a name="p5"></a>Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)
 
 #### Vad problemet innebär
 
@@ -98,7 +106,7 @@ Genom att tillämpa Synchronizer Token Pattern och generera en slumpmässig str�
 
 ## Prestandaproblem (Front end)
 
-### Problem 6: Referenser till javascriptfiler script i sidhuvudet
+### <a name="p6"></a>Problem 6: Referenser till javascriptfiler script i sidhuvudet.
 
 #### Vad problemet innebär
 
@@ -116,7 +124,7 @@ I filen appModules/siteViews/layouts/partials/head.html så finns det script tag
 
 Genom att placera scriptreferenserna i html dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[12]
 
-### Problem 7: Onödiga referenser till filer som saknas eller inte används.
+### <a name="p7"></a>Problem 7: Onödiga referenser till filer som saknas eller inte används.
 
 #### Vad problemet innebär
 
@@ -144,7 +152,7 @@ CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitio
 
 Ta bort referenserna till de icke existerande dokumenten och samt de som laddas in i onödan. Använd inte det gemensamma sidhuvudet i start/login-sidan. Ta bort onödiga stilar definierade i Bootstrap.css filen.
 
-### Problem 8: Onödigt stora javascriptfiler
+### <a name="p8"></a>Problem 8: Onödigt stora javascriptfiler
 
 #### Vad problemet innebär
 
@@ -164,7 +172,7 @@ Förminska och minifiera javascript.
 
 Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
 
-### <a name="p9"></a> Problem 9: Felplacerad inline kod (javascript och css)
+### <a name="p9"></a>Problem 9: Inline kod (javascript och css)
 
 #### Vad problemet innebär
 
