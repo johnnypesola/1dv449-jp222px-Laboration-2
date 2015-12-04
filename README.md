@@ -10,6 +10,8 @@
 -  [Problem 8: Onödigt stora javascriptfiler](#p8)
 -  [Problem 9: Inline kod (javascript och css)](#p9)
 
+***
+
 ## Säkerhetsproblem (Backend)
 
 ### <a name="p1"></a>Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
