@@ -20,10 +20,10 @@ Skriven av Johnny Pesola (jp222px) December 2015
 ### <a name="p1"></a>Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
 
 #### Vad problemet innebär
-Säkerhetshålet innebär kort och gott att attackeraren skriver sitt postdata på ett sådant sätt så att ej önskvärd databasåtkomst och manipulering av datat i databasen blir möjlig.
+Säkerhetshålet innebär kort och gott att attackeraren skriver sitt postdata på ett sådant sätt så att ej önskvärd databasåtkomst och manipulering av datat i databasen blir möjlig.[1]
 
 #### Eventuella följder
-Följderna av detta är katastrofala. Attackeraren kan logga in som en administratör i systemet. Användarnas lagrade känsliga uppgifter kan bli tillgängliga för attackeraren (Se Problem 2 för mer info). Attackeraren kan också eventuellt manipulera datat i databastabellen efter egna önskemål (till exempel byta lösenord på administratören), eller ta bort allt data. [1]
+Följderna av detta är katastrofala. Attackeraren kan logga in som en administratör i systemet. Användarnas lagrade känsliga uppgifter kan bli tillgängliga för attackeraren (Se Problem 2 för mer info). Attackeraren kan också eventuellt manipulera datat i databastabellen efter egna önskemål (till exempel byta lösenord på administratören), eller ta bort allt data.
    
 #### Identifierade SQL injections i applikationen
 När en inloggning sker så finns det i applikationen en sårbarhet för denna typ av attack. I källkoden i filen "appModules/login/lib/login.js" så konkateneras strängarna till en enda sql sats utan att de inkommande värderna kontrolleras eller saneras. Det här är en väldigt allvarlig typ av attack och bör undvikas genom att använda tekniken för databindning som används vid skapande och borttagning av meddelanden. Mer om detta nedan. [1]
@@ -44,10 +44,10 @@ Genom att göra på detta sätt genomgående i hela applikationen så bör probl
 ### <a name="p2"></a>Problem 2: Lagring av känsligt data
 
 #### Vad problemet innebär
-När känslig data inte krypteras/hashas på ett korrekt sätt så är följderna av detta är katastrofala ifall någon obehörig skulle få åtkomst till dessa till exempel genom en SQL-injection attack.
+När känslig data inte krypteras/hashas på ett korrekt sätt så är följderna av detta är katastrofala ifall någon obehörig skulle få åtkomst till dessa till exempel genom en SQL-injection attack.[4]
 
 #### Eventuella följder
-Ett exempel är att inloggningsuppgifter kan användas till att logga in på andra hemsidor och tjänster där användaren har samma användarnamn och lösenord. Väldigt känsliga bilder skulle kunna användas för utpressning av attackeraren. Kreditkortsuppgifter och personnummer skulle kunna användas för e-handel.[4]
+Ett exempel är att inloggningsuppgifter kan användas till att logga in på andra hemsidor och tjänster där användaren har samma användarnamn och lösenord. Väldigt känsliga bilder skulle kunna användas för utpressning av attackeraren. Kreditkortsuppgifter och personnummer skulle kunna användas för e-handel.
 
 #### Identifierad ohashad känslig data i applikationen
 I det här fallet är det extra illa eftersom lösenordet sparas i klartext och inte "hashas" till ett värde som inte går att gissa sig till av en attackerare. Hashning innebär att lösenordet översätts till ett större antal till synes slumpmässiga tecken som INTE går att översätta tillbaka till ursprungslösenordet. Ifall attackeraren nu får tag i inloggningsuppgifterna så kan han direkt börja använda dessa till att logga in på andra hemsidor/e-tjänster. Men ifall lösenordet hade varit hashat (med en säker metod) så hade attackeraren haft betydligt mindre nytta av dessa uppgifter.[5]
@@ -78,10 +78,10 @@ Det enklaste sättet att skydda sig är att filtrera det postade innehållet och
 ### <a name="p4"></a>Problem 4: Säkerhetskontroll för funktioner saknas
 
 #### Vad problemet innebär
-Attackerare som känner till eller som kan gissa sig till adresser gömda adresser i systemet kan att utföra funktioner eller metoder som de inte ska ha rätt till egentligen. Detta är möjligt eftersom det inte finns några rättighetskontroller på funktionerna/metoderna.
+Attackerare som känner till eller som kan gissa sig till adresser gömda adresser i systemet kan att utföra funktioner eller metoder som de inte ska ha rätt till egentligen. Detta är möjligt eftersom det inte finns några rättighetskontroller på funktionerna/metoderna.[9]
 
 #### Eventuella följder
-Följderna är att objekt av olika slag kan skapas, ändras eller tas bort eller mer avancerade operationer kan utföras i applikationen som attackeraren inte ska ha rätt till. Exempelvis skulle användare skulle kunnas tas bort, eller i den här applikationens fall: att meddelanden kan tas bort bara genom att känna till adressen och de rätta post-parametrarna.[9]
+Följderna är att objekt av olika slag kan skapas, ändras eller tas bort eller mer avancerade operationer kan utföras i applikationen som attackeraren inte ska ha rätt till. Exempelvis skulle användare skulle kunnas tas bort, eller i den här applikationens fall: att meddelanden kan tas bort bara genom att känna till adressen och de rätta post-parametrarna.
 
 #### Identifierade problem i applikationen
 I applikationen går att att gå in på index-sidan direkt utan att behöva logga in. Detta genom att helt enkelt ange adressen i webbläsarens adressfält. Antagligen ska detta endast vara möjligt för de inloggade användarna.   
@@ -164,7 +164,7 @@ CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitio
 
 #### Hur problemet kan åtgärdas
 
-Ta bort referenserna till de icke existerande dokumenten och samt de som laddas in i onödan. Använd inte det gemensamma sidhuvudet i start/login-sidan. Ta bort onödiga stilar definierade i Bootstrap.css filen.
+Ta bort referenserna till de icke existerande dokumenten och samt de som laddas in i onödan.[13] Använd inte det gemensamma sidhuvudet i start/login-sidan. Ta bort onödiga stilar definierade i Bootstrap.css filen.
 
 ***
 
@@ -184,9 +184,7 @@ I applikationen används en onödigt stor version av jquery som inte är minifie
 
 #### Hur problemet kan åtgärdas
 
-Förminska och minifiera javascript.
-
-Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
+Förminska och minifiera javascripten. Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
 
 ***
 
@@ -194,11 +192,11 @@ Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för 
 
 #### Vad problemet innebär
 
-Inline- javascript och css går förvisso snabbare för webbläsaren att läsa in första gången som sidan laddas in, tappar samtidigt möjligheten att bli cache:at resterande gånger som sidan laddas in.
+Inline- javascript och css går förvisso snabbare för webbläsaren att läsa in första gången som sidan laddas in, men tappar samtidigt möjligheten att bli cache:at resterande gånger som sidan laddas in.[15]
 
 #### Eventuella följder
 
-Inline-kod cachas inte och detta gör i längden att sidan tar längre tid att hämta för klienten. Det är generellt bättre att placera css- och javascript kod i externa filer, då chansen är större att sidan laddar snabbare med hjälp av att webbläsaren cachar dessa filer (förutsatt att webbservern stöjder detta). [15]
+Inline-kod cachas inte och detta gör i längden att sidan tar längre tid att hämta för klienten. Det är generellt bättre att placera css- och javascript kod i externa filer, då chansen är större att sidan laddar snabbare med hjälp av att webbläsaren cachar dessa filer (förutsatt att webbservern stöjder detta). 
 
 #### Identifierade problem i applikationen
 
@@ -208,7 +206,7 @@ Filerna appModules/message/views/index.html och appModules/siteViews/layouts/def
 #### Hur problemet kan åtgärdas
 
 Flytta inline javascriptkoden ifrån default.html till MessageBoard.js istället.
-Flytta inline csskoden ifrån index.html till en egen css fil och länka denna i sidhuvudet (head.html).
+Flytta inline csskoden ifrån index.html till en egen css fil och länka denna i sidhuvudet (head.html). [15]
 
 ***
 
