@@ -36,6 +36,8 @@ Tittar man i filen "appModules/message/messageModel.js" så ser man att SQL sats
     
 Genom att göra på detta sätt genomgående i hela applikationen så bör problemet åtgärdas.
 
+***
+
 ### <a name="p2"></a>Problem 2: Lagring av känsligt data
 
 #### Vad problemet innebär
@@ -49,6 +51,8 @@ I det här fallet är det extra illa eftersom lösenordet sparas i klartext och 
 
 #### Hur problemet kan åtgärdas
 Ett tips är att använda sig av följande [bibliotek](https://nodejs.org/api/crypto.html) för att kryptera lösenord. Viktigt att tänka på vid hashning är att använda sig av olika 32 eller 64 bitars "salt" för varje användares lösenord. Detta "salt" värde kan sparas i ett separat fält intill databaslösenordet.  [5]
+
+***
 
 ### <a name="p3"></a>Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
 
@@ -65,6 +69,8 @@ Applikationen bearbetar/filtrerar inte bort javascript eller andra känsliga htm
 Det enklaste sättet att skydda sig är att filtrera det postade innehållet och tillämpa whitelists för tillåtna tecken. Annars rekommenderas ett bibliotek för att tillämpa detta då det kan vara svårt att missa alla källor där detta kan uppstå. Organisationen OWASP har en bra källa med regler att tänka på om man väljer att göra detta själv [8]. Sammanfattningsvis är regeln att inte placera opålitlig data inom någon html-tags taggar (attributen), och att alltid filtrera datat som finns emellan start- och sluttaggen. 
    
 [Här](https://github.com/chriso/validator.js) är ett förslag på ett bibliotek som skulle vara ett alternativ för projektet
+
+***
 
 ### <a name="p4"></a>Problem 4: Säkerhetskontroll för funktioner saknas
 
@@ -85,6 +91,8 @@ Säkerhetskontroll saknas även (check om användaren är inloggad) för att hä
 
 En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. OWASP har en generell guide kring autentisering som kan vara bra att ta del av [10].
 
+***
+
 ### <a name="p5"></a>Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)
 
 #### Vad problemet innebär
@@ -103,6 +111,7 @@ I applikationen finns det inget skydd mot CSRF alls på någon sida.
 
 Genom att tillämpa Synchronizer Token Pattern och generera en slumpmässig sträng (token), placera den i ett gömt formulärfält för varje POST request, som servern sedan validerar kan detta problem lösas. De illasinnade hemsidorna/källorna kan omöjligt gissa sig till det slumpmässiga strängarna förutsatt att detta är korrekt implementerat. [11]
 
+***
 
 ## Prestandaproblem (Front end)
 
@@ -123,6 +132,8 @@ I filen appModules/siteViews/layouts/partials/head.html så finns det script tag
 #### Hur problemet kan åtgärdas
 
 Genom att placera scriptreferenserna i html dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[12]
+
+***
 
 ### <a name="p7"></a>Problem 7: Onödiga referenser till filer som saknas eller inte används.
 
@@ -152,6 +163,8 @@ CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitio
 
 Ta bort referenserna till de icke existerande dokumenten och samt de som laddas in i onödan. Använd inte det gemensamma sidhuvudet i start/login-sidan. Ta bort onödiga stilar definierade i Bootstrap.css filen.
 
+***
+
 ### <a name="p8"></a>Problem 8: Onödigt stora javascriptfiler
 
 #### Vad problemet innebär
@@ -171,6 +184,8 @@ I applikationen används en onödigt stor version av jquery som inte är minifie
 Förminska och minifiera javascript.
 
 Kika [här](https://github.com/jquery/jquery#how-to-build-your-own-jquery) för att se hur det går att bygga ett minifierat jquery bibliotek med bara ajax-modulen.
+
+***
 
 ### <a name="p9"></a>Problem 9: Inline kod (javascript och css)
 
