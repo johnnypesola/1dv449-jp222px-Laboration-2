@@ -1,14 +1,14 @@
 # Problem - Messy Labbage (Johnny Pesola / jp222px)
 
-[Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.](#p1)
-[Problem 2: Lagring av känsligt data](#p2)
-[Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker](#p3)
-[Problem 4: Säkerhetskontroll för funktioner saknas](#p4)
-[Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)](#p5)
-[Problem 6: Referenser till javascriptfiler script i sidhuvudet](#p6)
-[Problem 7: Onödiga referenser till filer som saknas eller inte används](#p7)
-[Problem 8: Onödigt stora javascriptfiler](#p8)
-[Problem 9: Inline kod (javascript och css)](#p9)
+-  [Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.](#p1)
+-  [Problem 2: Lagring av känsligt data](#p2)
+-  [Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker](#p3)
+-  [Problem 4: Säkerhetskontroll för funktioner saknas](#p4)
+-  [Problem 5: Inget skydd för "Cross-Site Request Forgery" (CSRF)](#p5)
+-  [Problem 6: Referenser till javascriptfiler script i sidhuvudet](#p6)
+-  [Problem 7: Onödiga referenser till filer som saknas eller inte används](#p7)
+-  [Problem 8: Onödigt stora javascriptfiler](#p8)
+-  [Problem 9: Inline kod (javascript och css)](#p9)
 
 ## Säkerhetsproblem (Backend)
 
