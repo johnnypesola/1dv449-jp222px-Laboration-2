@@ -12,10 +12,6 @@
 
 ## Säkerhetsproblem (Backend)
 
-Analysen av säkerhetsproblemen i applikationen är starkt influerad av organisationen OWASP:s top 10 lista över säkerhetshål. Denna lista kan hittas [här](http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf)
-
-***
-
 ### <a name="p1"></a>Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
 
 #### Vad problemet innebär
