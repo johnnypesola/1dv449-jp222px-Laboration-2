@@ -1,4 +1,4 @@
-# Problem - Messy Labbage
+# Identifierade problem i Messy Labbage
 Skriven av Johnny Pesola (jp222px)
 
 -  [Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.](#p1)
@@ -208,17 +208,23 @@ Filerna appModules/message/views/index.html och appModules/siteViews/layouts/def
 Flytta inline javascriptkoden ifrån default.html till MessageBoard.js istället.
 Flytta inline csskoden ifrån index.html till en egen css fil och länka denna i sidhuvudet (head.html).
 
+***
+
 ## Egna övergripande reflektioner
 
-HTTPD/2 knackar på dörren, minifiering onödig.
+### Säkerhet
+
+
+
+### Optimering
+
+Nu när HTTPD/2 knackar på dörren så känns vissa tidskrävande optimeringar onödiga. Minifiering blir lite onödigt eftersom det datat ändå komprimeras binärt. Domain sharding kommer att rentav drar ner prestandan för HTTP/2 och bör därför inte användas. In-line resurser blir onödiga i och med att webservrarna kan puscha resurser direkt till klienten. [16] Det är trevligt att dessa optimeringar kommer att skötas på protokollnivå istället för att man som webbutvecklare är tvungen att lägga lika mycket tid på det som idag. Fast det är ju förutsatt att webservern stödjer och är konfigurerad för detta samt att alla klienter använder en modern webbläsare.
 
 Enda autentiseringschecken finns när man kommer till index. Annars så har vem som helst rätt att göra vad som helst i applikationen.
   
 Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktionaliteten finns där, och även frontend funktionalitet. Men det är inte synsligt i gränsnittet.
 
-
-
-## Tips
+***
 
 ## Referenser
 
@@ -256,5 +262,7 @@ https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Che
 [14] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 69.
 
 [15] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 55.
+
+[16] Ilya Grigorik, "Chapter 12. HTTP/2", O'Reilly, 2013, [Online]  Tillgänglig: http://chimera.labs.oreilly.com/books/1230000000545/ch12.html#HTTP2_PUSH
 
 / Johnny Pesola
