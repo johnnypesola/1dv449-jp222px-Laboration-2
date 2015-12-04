@@ -20,14 +20,14 @@ Skriven av Johnny Pesola (jp222px) December 2015
 ### <a name="p1"></a>Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.
 
 #### Vad problemet innebär
-Säkerhetshålet innebär kort och gott att attackeraren skriver sitt postdata på ett sådant sätt så att ej önskvärd databasåtkomst och manipulering av datat i databasen blir möjlig.[1]
+Säkerhetshålet innebär i stora drag att attackeraren skriver sitt postdata på ett sådant sätt så att ej önskvärd databasåtkomst och eventuell manipulering av datat i databasen blir möjlig.[1]
 
 #### Eventuella följder
-Följderna av detta är katastrofala. Attackeraren kan logga in som en administratör i systemet. Användarnas lagrade känsliga uppgifter kan bli tillgängliga för attackeraren (Se Problem 2 för mer info). Attackeraren kan också eventuellt manipulera datat i databastabellen efter egna önskemål (till exempel byta lösenord på administratören), eller ta bort allt data.
+Följderna av detta är katastrofala. Attackeraren kan logga in som en administratör i systemet. Användarnas lagrade känsliga uppgifter kan bli tillgängliga för attackeraren (Se Problem 2 för mer info). Attackeraren kan också eventuellt manipulera datat i databastabellen efter egna önskemål (till exempel byta lösenord på administratören), eller ta bort data.
    
 #### Identifierade SQL injections i applikationen
-När en inloggning sker så finns det i applikationen en sårbarhet för denna typ av attack. I källkoden i filen "appModules/login/lib/login.js" så konkateneras strängarna till en enda sql sats utan att de inkommande värderna kontrolleras eller saneras. Det här är en väldigt allvarlig typ av attack och bör undvikas genom att använda tekniken för databindning som används vid skapande och borttagning av meddelanden. Mer om detta nedan. [1]
-
+När en inloggning sker så finns det i applikationen en sårbarhet för denna typ av attack. I källkoden i filen "appModules/login/lib/login.js" så konkateneras strängarna till en enda sql sats utan att de inkommande värderna kontrolleras eller saneras. Det här är en väldigt allvarlig typ av attack och bör undvikas genom att använda tekniken för databindning som används vid skapande och borttagning av meddelanden i applikationen. [1]
+    
 Applikationen har testats med att utsättas för dessa typer av attacker vid skapande och borttagning av meddelanden och för dessa metoder hittades inga sårbarheter för denna typ av attack.
     
 Det jag kontret lyckats göra med hjälp attacken i applikationen är att logga in med sql injections utan att känna till användarnamn eller lösenord, men jag har inte lyckats manipulera datat eller visa känslig data.
@@ -35,7 +35,7 @@ Det jag kontret lyckats göra med hjälp attacken i applikationen är att logga 
 #### Hur problemen kan åtgärdas
 Organisationen OWASP har på sin hemsida en allmän bra guide för att undvika detta [2], men just i det här fallet så är det rekommenderat att använda sig av sqlite3 bibliotekets dokumenterade metoder [3].
     
-Tittar man i filen "appModules/message/messageModel.js" så ser man att SQL satserna använder syntaxen "db.run("INSERT INTO message (message, userID) VALUES (?, ?)", [message, userID]" vilket innebär att inkommande värderna "saneras" i samband med då värderna ifrån arrayen flytas till frågetecknen i sql satsen.
+Tittar man i filen "appModules/message/messageModel.js" så ser man att SQL satserna använder syntaxen "db.run("INSERT INTO message (message, userID) VALUES (?, ?)", [message, userID]" vilket innebär att inkommande värderna "saneras" i samband med då värderna ifrån arrayen flyttas till frågetecknen i sql satsen.
     
 Genom att göra på detta sätt genomgående i hela applikationen så bör problemet åtgärdas.
 
@@ -53,23 +53,23 @@ Ett exempel är att inloggningsuppgifter kan användas till att logga in på and
 I det här fallet är det extra illa eftersom lösenordet sparas i klartext och inte "hashas" till ett värde som inte går att gissa sig till av en attackerare. Hashning innebär att lösenordet översätts till ett större antal till synes slumpmässiga tecken som INTE går att översätta tillbaka till ursprungslösenordet. Ifall attackeraren nu får tag i inloggningsuppgifterna så kan han direkt börja använda dessa till att logga in på andra hemsidor/e-tjänster. Men ifall lösenordet hade varit hashat (med en säker metod) så hade attackeraren haft betydligt mindre nytta av dessa uppgifter.[5]
 
 #### Hur problemet kan åtgärdas
-Ett tips är att använda sig av följande [bibliotek](https://nodejs.org/api/crypto.html) för att kryptera lösenord. Viktigt att tänka på vid hashning är att använda sig av olika 32 eller 64 bitars "salt" för varje användares lösenord. Detta "salt" värde kan sparas i ett separat fält intill databaslösenordet.  [5]
+Ett tips är att använda sig av följande [bibliotek](https://nodejs.org/api/crypto.html) för att hasha lösenord. Viktigt att tänka på vid hashning är att använda sig av olika 32 eller 64 bitars "salt" för varje användares lösenord. Detta "salt" värde kan sparas i ett separat fält intill databaslösenordet. [5]
 
 ***
 
 ### <a name="p3"></a>Problem 3: Inget skydd för Cross Site Scripting (XSS) Attacker
 
 #### Vad problemet innebär
-Om data inte valideras korrekt, mer specifikt att javascript, iframe-taggar, html-element med src attribut (andra kodspråk och taggar kan förekomma) inte filtreras/bearbetas i innehållet som postas från klient till server uppstår denna säkerhetsrisk. När innehåller sedan visas i klienters webbläsare så körs den tidigare postade javascript-koden hos klienten och kan då exempelvis stjäla klientens sessionskaka och vidarebefordra denna till attackeraren. I stora drag har attackeraren kontroll över det mesta som presenteras för och som finns lagrat hos klienten gällande den aktuella webbsidan. [6]
+Om data inte valideras korrekt, mer specifikt att javascript, iframe-taggar, html-element med src attribut (andra kodspråk och taggar kan förekomma) inte filtreras/bearbetas i innehållet som postas från klient till server uppstår denna säkerhetsrisk. När innehållet sedan visas i klienters webbläsare så körs denna javascript-kod hos klienten och kan då exempelvis stjäla klientens sessionskaka och vidarebefordra denna till attackeraren. I stora drag har attackeraren kontroll över det mesta som presenteras för och som finns lagrat hos klienten gällande den aktuella webbsidan. [6]
 
 #### Eventuella följder
-Eftersom attackeraren har kontroll över allt som visas på den kapade hemsidan hos klientens webbläsare så kan användaren enkelt luras till att exempelvis att ange känsliga uppgifter (kreditkort, personnummer, mm). Men det allvarligaste är nog att sessionen enkelt kan stjälas av attackeraren och detta innebär att attackeraren blir "inloggad" på hemsidan/applikationen som användaren utan att kunna användarens uppgifter.[7]
+Eftersom attackeraren har kontroll över allt som visas på den kapade hemsidan hos klientens webbläsare så kan användaren enkelt luras till att exempelvis att ange känsliga uppgifter (kreditkort, personnummer, mm). Men det allvarligaste är nog att sessionen enkelt kan stjälas av attackeraren och detta innebär att attackeraren blir inloggad på hemsidan/applikationen som användaren utan att känna till användarens inloggningsuppgifter.[7]
 
 #### Identifierade problem i applikationen
 Applikationen bearbetar/filtrerar inte bort javascript eller andra känsliga html taggar ifrån meddelandetexten som postas in. 
 
 #### Hur problemet kan åtgärdas
-Det enklaste sättet att skydda sig är att filtrera det postade innehållet och tillämpa whitelists för tillåtna tecken. Annars rekommenderas ett bibliotek för att tillämpa detta då det kan vara svårt att missa alla källor där detta kan uppstå. Organisationen OWASP har en bra källa med regler att tänka på om man väljer att göra detta själv [8]. Sammanfattningsvis är regeln att inte placera opålitlig data inom någon html-tags taggar (attributen), och att alltid filtrera datat som finns emellan start- och sluttaggen. 
+Det enklaste sättet att skydda sig är att filtrera det postade innehållet och tillämpa whitelists för tillåtna tecken. Annars rekommenderas ett bibliotek för att tillämpa detta då det kan vara svårt att missa alla källor där detta kan uppstå. Organisationen OWASP har en bra källa med regler att tänka på om man väljer att göra detta själv [8]. Sammanfattningsvis är regeln att inte placera opålitlig data inom någon html tag (attributen), och att alltid filtrera datat som finns emellan start- och sluttaggen. 
    
 [Här](https://github.com/chriso/validator.js) är ett förslag på ett bibliotek som skulle vara ett alternativ för projektet
 
@@ -84,11 +84,11 @@ Attackerare som känner till eller som kan gissa sig till adresser gömda adress
 Följderna är att objekt av olika slag kan skapas, ändras eller tas bort eller mer avancerade operationer kan utföras i applikationen som attackeraren inte ska ha rätt till. Exempelvis skulle användare skulle kunnas tas bort, eller i den här applikationens fall: att meddelanden kan tas bort bara genom att känna till adressen och de rätta post-parametrarna.
 
 #### Identifierade problem i applikationen
-I applikationen går att att gå in på index-sidan direkt utan att behöva logga in. Detta genom att helt enkelt ange adressen i webbläsarens adressfält. Antagligen ska detta endast vara möjligt för de inloggade användarna.   
+I applikationen går det att gå in på index-sidan direkt utan att behöva logga in. Detta genom att helt enkelt ange adressen i webbläsarens adressfält. Antagligen ska detta endast vara möjligt för de inloggade användarna.   
    
 Ett annat betydligt större problem är det går att ta bort meddelanden utan någon som helst inloggning, bara genom att känna till adressen och parametrarna. Exempelvis: Om en POST med värdet (messageID = 3) skickas till http://localhost:3000/message/delete så tas meddelandet med id-numret 3 bort oberoende om man är inloggad eller inte, eller vem man är inloggad som.
 
-Säkerhetskontroll saknas även (check om användaren är inloggad) för att hämta meddelanden. Eftersom det i template filen default.html körs javascript som anropar metoden MessageBoard.getMessages så hämtas meddelanderna till klientens webbläsare när denne anländer till startsidan, utan att ens ha loggat in.
+En säkerhetskontroll saknas även (en check om användaren är inloggad) för att hämta meddelanden. Eftersom det i template filen default.html körs javascript som anropar metoden MessageBoard.getMessages så hämtas meddelanderna till klientens webbläsare när denne anländer till startsidan, utan att ens ha behövt logga in.
 
 #### Hur problemet kan åtgärdas
 
@@ -100,11 +100,11 @@ En säkerhetskontroll, fördelaktigen efter principen ACL behöver tillämpas. O
 
 #### Vad problemet innebär
 
-Det är möjligt för andra hemsidor, webb-applikationer och andra illasinnade källor att anropa funktionalitet i systemet om en användare är inloggad i messy-labbage applikationen. 
+Det är möjligt för andra hemsidor, webb-applikationer och andra illasinnade källor att anropa funktionalitet i systemet om en användare är inloggad i messy-labbage applikationen. [17]
 
 #### Eventuella följder
 
-Användare kan, utan att de är medvetna om det och utan medgivande manipulera messy-labbage applikationen innehåll genom att surfa in på andra hemsidor. De illasinnade applikationerna anropar helt enkelt exempelvis http://localhost:3000/message med en POST med ett nytt meddelande genom javascript i användarens webbläsare i samband med att användaren besöker den illasinnade webbplatsen. I och med att användaren fortfarande är inloggad i systemet så går detta utan problem.
+Användare kan, utan att de är medvetna om det och utan medgivande manipulera messy-labbage applikationens innehåll genom att surfa in på andra hemsidor. De illasinnade applikationerna anropar helt enkelt exempelvis http://localhost:3000/message med en POST med ett nytt meddelande genom javascript i användarens webbläsare i samband med att användaren besöker den illasinnade webbplatsen. I och med att användaren fortfarande är inloggad i systemet så går detta utan problem.
 
 #### Identifierade problem i applikationen
 
@@ -126,15 +126,15 @@ När det finns referenser till externa scriptfiler i sidhuvudet så är det ett 
 
 #### Eventuella följder
 
-För hemsidebesökare är sidan helvit utan innehåll tills scripten har hämtats och laddats av webbläsaren, först då får klienter en visuell bekräftelse på att sidan över huvud taget laddar. Klienter med dåliga uppkopplingar (mobiltelefoner) upplever detta värst.[]
+För hemsidebesökare är sidan helvit utan innehåll tills dess att scripten har hämtats och lästs in av webbläsaren, först då får klienter en visuell bekräftelse på att sidan över huvud taget laddar. Klienter med dåliga uppkopplingar (mobiltelefoner) upplever detta värst.
 
 #### Identifierade problem i applikationen
 
-I filen appModules/siteViews/layouts/partials/head.html så finns det script taggar som refererar till externa javascriptfiler
+I filen appModules/siteViews/layouts/partials/head.html så finns det script-taggar som refererar till externa javascriptfiler.
 
 #### Hur problemet kan åtgärdas
 
-Genom att placera scriptreferenserna i html dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[12]
+Genom att placera scriptreferenserna i html-dokumentets slut så undviks detta problem. Då hämtas och laddas javascripten in först när html dokumentet laddats in och användaren blivit bemött av DOM:en och CSSOM:en[12]
 
 ***
 
@@ -142,7 +142,7 @@ Genom att placera scriptreferenserna i html dokumentets slut så undviks detta p
 
 #### Vad problemet innebär
 
-När der finns referenser till filer som saknas eller inte används så resulterar det i onödiga HTTP anrop till servern som belastar både servern och klienter. [13]
+När det finns referenser till filer som saknas eller inte används så resulterar det i onödiga HTTP anrop till servern som belastar både servern och klienter. [13]
 
 #### Eventuella följder
 
@@ -152,15 +152,15 @@ När klienters webbläsare försöker ladda ner dessa icke existerande samt onö
 
 I filerna appModules/siteViews/layouts/partials/head.html och appModules/login/views/index.html finns referenser till filer som inte existerar.
     
-Det finns även filer som laddas in o inödan: Stylesheet referensen till "//fonts.googleapis.com/icon?family=Material+Icons" verkar heller inte användas någonstans i dokumentet, vilket gör hämtning av denna fil helt onödig.
+Det finns även filer som laddas in i onödan: Stylesheet referensen till "//fonts.googleapis.com/icon?family=Material+Icons" verkar heller inte användas någonstans i dokumentet, vilket gör hämtningen av denna fil helt onödig.
     
-På start/login-sidan så laddas dessa två javascript in i onödan eftersom de inte används där: "/static/javascript/Message.js", "/static/javascript/MessageBoard.js".
+På start/login-sidan så laddas dessa två javascript-filer in i onödan eftersom de inte används där: "/static/javascript/Message.js", "/static/javascript/MessageBoard.js".
     
 Bakgrundsbilden "/static/images/b.jpg" används inte visuellt på sidan och laddas in i onödan.
     
 När man är inloggad laddas filen "/static/css/signin.css" i onödan eftesom den bara används på startsidan.
     
-CSS filen "/static/css/bootstrap.css" innehåller månaga onödiga stildefinitioner som inte används.
+CSS filen "/static/css/bootstrap.css" innehåller många onödiga stildefinitioner som inte används.
 
 #### Hur problemet kan åtgärdas
 
@@ -172,7 +172,7 @@ Ta bort referenserna till de icke existerande dokumenten och samt de som laddas 
 
 #### Vad problemet innebär
 
-Det finns javascript-filer som är onödigt stora eftersom att de innehåller onödigt kod som inte används samt att de inte är minifierade. [14]
+Det finns javascript-filer som är onödigt stora eftersom att de innehåller onödig kod som inte används samt att de inte är minifierade. [14]
 
 #### Eventuella följder
 
@@ -192,11 +192,11 @@ Förminska och minifiera javascripten. Kika [här](https://github.com/jquery/jqu
 
 #### Vad problemet innebär
 
-Inline- javascript och css går förvisso snabbare för webbläsaren att läsa in första gången som sidan laddas in, men tappar samtidigt möjligheten att bli cache:at resterande gånger som sidan laddas in.[15]
+Inline- javascript och css går förvisso snabbare för webbläsaren att läsa in första gången som sidan laddas in, men tappar samtidigt möjligheten att bli cache:at hos klientens webbläsare för att sedan hämtas därifrån de resterande gånger som sidan laddas in.[15]
 
 #### Eventuella följder
 
-Inline-kod cachas inte och detta gör i längden att sidan tar längre tid att hämta för klienten. Det är generellt bättre att placera css- och javascript kod i externa filer, då chansen är större att sidan laddar snabbare med hjälp av att webbläsaren cachar dessa filer (förutsatt att webbservern stöjder detta). 
+Inline-kod cache:as inte och detta gör i längden att sidan tar längre tid att hämta för klienten. Det är generellt bättre att placera css- och javascript koden i externa filer, då chansen är större att sidan laddar snabbare med hjälp av att webbläsaren cache:ar dessa filer (förutsatt att webbservern är konfigurerad för detta). 
 
 #### Identifierade problem i applikationen
 
@@ -262,3 +262,6 @@ https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Che
 [15] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 55.
 
 [16] Ilya Grigorik, "Chapter 12. HTTP/2", O'Reilly, 2013, [Online]  Tillgänglig: http://chimera.labs.oreilly.com/books/1230000000545/ch12.html#HTTP2_PUSH
+
+[17] The Open Web Application Security Project, "Top 10 2013-A8-Cross-Site Request Forgery (CSRF)", OWASP, September 2013, [Online]  Tillgänglig: 
+https://www.owasp.org/index.php/Top_10_2013-A8-Cross-Site_Request_Forgery_(CSRF)
