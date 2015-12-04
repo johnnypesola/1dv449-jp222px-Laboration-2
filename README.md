@@ -10,6 +10,8 @@ Skriven av Johnny Pesola (jp222px) December 2015
 -  [Problem 7: Onödiga referenser till filer som saknas eller inte används](#p7)
 -  [Problem 8: Onödigt stora javascriptfiler](#p8)
 -  [Problem 9: Inline kod (javascript och css)](#p9)
+-  [Egna övergripande reflektioner](#refl)
+-  [Referenser](#refer)
 
 ***
 
@@ -210,23 +212,21 @@ Flytta inline csskoden ifrån index.html till en egen css fil och länka denna i
 
 ***
 
-## Egna övergripande reflektioner
+## <a name="refl"></a>Egna övergripande reflektioner
 
 ### Säkerhet
 
-
+Häromdagen satt jag och tittade på flödet frågor som strömmade in i Stackoverflow. Många ställde frågor om varför inte en viss funktion inte fungerade som den skulle i deras (i det här fallet php) kod, men det jag reagerade på var att de inte hade någon som helst säkerhetstänk. SQL-satserna var vidöppna för attacker och det fanns oftast ingen access-kontroll för känsliga funktioner. Det värsta av allt var det att de som svarade på frågorna inte fokuserade någonting på att påtala säkerhetsbristerna, utan mest verkade tävla om att svara på den ställda frågan så fort som möjligt för att få högre poäng på sitt konto. De tyckte väl helt enkelt inte att det var värt besväret. 
+    
+Det är inte konstigt att det finns många nybörjare som gör osäkra hemsidor på internet när det inte finns någon som påtalar deras brister, inte ens på Stackoverflow som jag anser är en bra källa för information.
 
 ### Optimering
 
 Nu när HTTPD/2 knackar på dörren så känns vissa tidskrävande optimeringar onödiga. Minifiering blir lite onödigt eftersom det datat ändå komprimeras binärt. Domain sharding kommer att rentav drar ner prestandan för HTTP/2 och bör därför inte användas. In-line resurser blir onödiga i och med att webservrarna kan puscha resurser direkt till klienten. [16] Det är trevligt att dessa optimeringar kommer att skötas på protokollnivå istället för att man som webbutvecklare är tvungen att lägga lika mycket tid på det som idag. Fast det är ju förutsatt att webservern stödjer och är konfigurerad för detta samt att alla klienter använder en modern webbläsare.
 
-Enda autentiseringschecken finns när man kommer till index. Annars så har vem som helst rätt att göra vad som helst i applikationen.
-  
-Mycket kod är oimplementerat. Till exempel radera meddelanden. Backend funktionaliteten finns där, och även frontend funktionalitet. Men det är inte synsligt i gränsnittet.
-
 ***
 
-## Referenser
+## <a name="refer"></a>Referenser
 
 [1] The Open Web Application Security Project, "Top 10 2013-A1-Injection", OWASP, Juni 2013 [Online] Tillgänglig: https://www.owasp.org/index.php/Top_10_2013-A1-Injection [Hämtad: 4 december, 2015].
 
