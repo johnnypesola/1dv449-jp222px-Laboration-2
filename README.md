@@ -1,5 +1,5 @@
 # Identifierade problem i Messy Labbage
-Skriven av Johnny Pesola (jp222px)
+Skriven av Johnny Pesola (jp222px) December 2015
 
 -  [Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.](#p1)
 -  [Problem 2: Lagring av känsligt data](#p2)
