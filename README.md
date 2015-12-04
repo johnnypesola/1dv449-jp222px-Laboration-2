@@ -1,4 +1,5 @@
-# Problem - Messy Labbage (Johnny Pesola / jp222px)
+# Problem - Messy Labbage
+Skriven av Johnny Pesola (jp222px)
 
 -  [Problem 1: SQL injections - Ej önskvärd databasåtkomst och manipulering av data.](#p1)
 -  [Problem 2: Lagring av känsligt data](#p2)
