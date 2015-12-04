@@ -264,5 +264,3 @@ https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Che
 [15] Steve Sounders, High Performance Websites, O'Reilly, 2007, sid. 55.
 
 [16] Ilya Grigorik, "Chapter 12. HTTP/2", O'Reilly, 2013, [Online]  Tillgänglig: http://chimera.labs.oreilly.com/books/1230000000545/ch12.html#HTTP2_PUSH
-
-/ Johnny Pesola
